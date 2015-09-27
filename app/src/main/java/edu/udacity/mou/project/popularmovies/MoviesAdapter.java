@@ -12,13 +12,12 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import edu.udacity.mou.project.popularmovies.model.Movie;
+import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 
 /**
  * Created by Mou on 26/9/15.
  */
 public class MoviesAdapter extends ArrayAdapter<Movie> {
-
-    private static final String IMAGE_BASE_URI = "http://image.tmdb.org/t/p/w500/";
 
     public MoviesAdapter(Context context) {
         super(context, R.layout.item_movie);
@@ -43,21 +42,13 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
     }
 
     private void setMovieImage (int position, MovieHolder holder) {
-        Uri imageUri = Uri.parse(IMAGE_BASE_URI)
-                .buildUpon()
-                .appendEncodedPath(getItem(position).getMoviePoster())
-                .build();
-
-        Log.d("URL", imageUri.toString());
-
-        Picasso
-                .with(getContext())
-                .load(imageUri)
-                .placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher)
-                .fit()
-                .centerInside()
-                .into(holder.movieImage);
+        Picasso.with(getContext())
+            .load(MovieUtils.getImageUri(getContext(), getItem(position).getMoviePoster()))
+            .placeholder(R.drawable.placeholder)
+            .error(R.drawable.error_placeholder)
+            .fit()
+            .centerInside()
+            .into(holder.movieImage);
 
     }
 
