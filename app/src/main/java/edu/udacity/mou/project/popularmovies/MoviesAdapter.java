@@ -1,8 +1,8 @@
 package edu.udacity.mou.project.popularmovies;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,12 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.udacity.mou.project.popularmovies.model.Movie;
+
 /**
  * Created by Mou on 26/9/15.
  */
-public class MoviesAdapter extends ArrayAdapter<String> {
+public class MoviesAdapter extends ArrayAdapter<Movie> {
 
     private static final String IMAGE_BASE_URI = "http://image.tmdb.org/t/p/w500/";
 
@@ -43,8 +45,10 @@ public class MoviesAdapter extends ArrayAdapter<String> {
     private void setMovieImage (int position, MovieHolder holder) {
         Uri imageUri = Uri.parse(IMAGE_BASE_URI)
                 .buildUpon()
-                .appendPath(getItem(position))
+                .appendEncodedPath(getItem(position).getMoviePoster())
                 .build();
+
+        Log.d("URL", imageUri.toString());
 
         Picasso
                 .with(getContext())
