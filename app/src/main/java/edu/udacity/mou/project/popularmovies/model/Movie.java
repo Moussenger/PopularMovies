@@ -1,11 +1,13 @@
 package edu.udacity.mou.project.popularmovies.model;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Mou on 27/9/15.
  */
-public class Movie {
+public class Movie implements Parcelable {
     private long   mId;
     private String mOriginalTitle;
     private String mMoviePoster;
@@ -24,6 +26,40 @@ public class Movie {
         mUserRating    = userRating;
         mReleaseDate   = releaseDate;
     }
+
+    public Movie (Parcel input) {
+        mId            = input.readLong();
+        mOriginalTitle = input.readString();
+        mMoviePoster   = input.readString();
+        mSynopsis      = input.readString();
+        mUserRating    = input.readFloat();
+        mReleaseDate   = input.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(mId);
+        dest.writeString(mOriginalTitle);
+        dest.writeString(mMoviePoster);
+        dest.writeString(mSynopsis);
+        dest.writeFloat(mUserRating);
+        dest.writeString(mReleaseDate);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel input) {
+            return new Movie(input);
+        }
+
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public static class Builder {
         private Movie mMovie;
