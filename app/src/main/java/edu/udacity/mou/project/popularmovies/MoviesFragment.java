@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +41,7 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
 
     private GridView mMoviesGridView;
     private MoviesAdapter mMovieAdapter;
+    private ProgressBar mLoadingMoviesProgress;
 
     private IMovieClickListener mListener;
 
@@ -53,8 +55,9 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies, container, true);
 
-        mMoviesGridView = (GridView) view.findViewById(R.id.movies_grid);
-        mMovieAdapter   = new MoviesAdapter(getActivity());
+        mMoviesGridView        = (GridView) view.findViewById(R.id.movies_grid);
+        mMovieAdapter          = new MoviesAdapter(getActivity());
+        mLoadingMoviesProgress = (ProgressBar) view.findViewById(R.id.loading_movies_progress);
 
         mMoviesGridView.setAdapter(mMovieAdapter);
         mMoviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -98,9 +101,15 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
     public void setListener(IMovieClickListener listener) { mListener = listener; }
 
     @Override
+    public void onStartMoviesLoad() {
+        mLoadingMoviesProgress.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onMoviesLoaded(List<Movie> movies) {
         mMovieAdapter.clear();
         mMovieAdapter.addAll(movies);
+        mLoadingMoviesProgress.setVisibility(View.GONE);
     }
 
     public interface IMovieClickListener {

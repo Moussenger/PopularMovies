@@ -37,6 +37,13 @@ public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
     }
 
     @Override
+    protected void onPreExecute() {
+        if(mListener != null) {
+            mListener.onStartMoviesLoad();
+        }
+    }
+
+    @Override
     protected List<Movie> doInBackground(String... params) {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -129,6 +136,7 @@ public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
     }
 
     public interface IMoviesNetworkListener {
+        void onStartMoviesLoad ();
         void onMoviesLoaded (List<Movie> movies);
     }
 }
