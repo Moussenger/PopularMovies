@@ -4,6 +4,8 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import edu.udacity.mou.project.popularmovies.utils.ParcelableUtils;
+
 /**
  * Created by Mou on 27/9/15.
  */
@@ -14,17 +16,19 @@ public class Movie implements Parcelable {
     private String mSynopsis;
     private float  mUserRating;
     private String mReleaseDate;
+    private boolean mFavorite;
 
     private Movie () {}
 
     public Movie (long id, String originalTitle, String moviePoster,
-                   String synopsis, float userRating, String releaseDate) {
+                   String synopsis, float userRating, String releaseDate, boolean favorite) {
         mId            = id;
         mOriginalTitle = originalTitle;
         mMoviePoster   = moviePoster;
         mSynopsis      = synopsis;
         mUserRating    = userRating;
         mReleaseDate   = releaseDate;
+        mFavorite      = favorite;
     }
 
     public Movie (Parcel input) {
@@ -34,6 +38,7 @@ public class Movie implements Parcelable {
         mSynopsis      = input.readString();
         mUserRating    = input.readFloat();
         mReleaseDate   = input.readString();
+        mFavorite      = ParcelableUtils.readBoolean(input);
     }
 
     @Override
@@ -49,6 +54,7 @@ public class Movie implements Parcelable {
         dest.writeString(mSynopsis);
         dest.writeFloat(mUserRating);
         dest.writeString(mReleaseDate);
+        ParcelableUtils.writeBoolean(dest, mFavorite);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -73,6 +79,7 @@ public class Movie implements Parcelable {
         public Builder setSynopsis(String synopsis) { mMovie.setSynopsis(synopsis); return this; }
         public Builder setUserRating(float userRating) { mMovie.setUserRating(userRating); return this; }
         public Builder setReleaseDate(String releaseDate) { mMovie.setReleaseDate(releaseDate); return this; }
+        public Builder setFavorite (Boolean favorite) { mMovie.setFavorite(favorite); return this; }
 
         public Movie build () {
             return mMovie;
@@ -98,6 +105,9 @@ public class Movie implements Parcelable {
     public String getReleaseDate() { return mReleaseDate; }
     public void setReleaseDate(String releaseDate) { mReleaseDate = releaseDate; }
 
+    public boolean isFavorite() { return mFavorite; }
+    public void setFavorite(boolean mFavorite) { this.mFavorite = mFavorite; }
+
     @Override
     public String toString() {
         return "Movie{" +
@@ -107,6 +117,7 @@ public class Movie implements Parcelable {
                 ", mSynopsis='" + mSynopsis + '\'' +
                 ", mUserRating=" + mUserRating +
                 ", mReleaseDate='" + mReleaseDate + '\'' +
+                ", mFavorite ='" + mFavorite + '\'' +
                 '}';
     }
 }

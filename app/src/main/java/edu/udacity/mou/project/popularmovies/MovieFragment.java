@@ -34,15 +34,21 @@ import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 /**
  * Created by Mou on 26/9/15.
  */
-public class MovieFragment extends Fragment {
+public class MovieFragment extends Fragment implements View.OnClickListener{
 
     public static final String MOVIE = "movie";
+
+    private static final int STAR_EMPTY    = R.drawable.star_empty_icon;
+    private static final int STAR_SELECTED = R.drawable.star_selected_icon;
 
     private TextView  mTitleTextView;
     private ImageView mPosterImageView;
     private TextView  mDateTextView;
     private TextView  mRatingTextView;
     private TextView  mSynopsisTextView;
+    private ImageView mFavImageView;
+
+    private Movie mMovie;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +60,7 @@ public class MovieFragment extends Fragment {
 
         if(intent != null && intent.hasExtra(MOVIE)) {
             Movie movie = intent.getParcelableExtra(MOVIE);
+            mMovie = movie;
             populateData(movie);
         }
 
@@ -66,6 +73,7 @@ public class MovieFragment extends Fragment {
         mDateTextView     = (TextView) view.findViewById(R.id.movie_date);
         mRatingTextView   = (TextView) view.findViewById(R.id.movie_rating);
         mSynopsisTextView = (TextView) view.findViewById(R.id.movie_synopsis);
+        mFavImageView     = (ImageView) view.findViewById(R.id.movie_fav);
     }
 
     private void populateData(Movie movie) {
@@ -74,6 +82,10 @@ public class MovieFragment extends Fragment {
         mRatingTextView.setText(getString(R.string.format_rating, movie.getUserRating()));
         mSynopsisTextView.setText(movie.getSynopsis());
 
+        mFavImageView.setOnClickListener(this);
+
+        updateFavoriteIcon();
+
         Picasso.with(getActivity())
                 .load(MovieUtils.getImageUri(getActivity(), movie.getMoviePoster()))
                 .placeholder(R.drawable.placeholder)
@@ -81,5 +93,15 @@ public class MovieFragment extends Fragment {
                 .fit()
                 .centerInside()
                 .into(mPosterImageView);
+    }
+
+    @Override
+    public void onClick(View view) {
+        mMovie.setFavorite(!mMovie.isFavorite());
+        updateFavoriteIcon();
+    }
+
+    private void updateFavoriteIcon () {
+        mFavImageView.setImageResource(mMovie.isFavorite() ? STAR_SELECTED : STAR_EMPTY);
     }
 }
