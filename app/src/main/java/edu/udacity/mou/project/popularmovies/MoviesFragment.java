@@ -61,6 +61,7 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
         mMovieAdapter          = new MoviesAdapter(getActivity());
         mLoadingMoviesProgress = (ProgressBar) view.findViewById(R.id.loading_movies_progress);
 
+        mMoviesGridView.setEmptyView(view.findViewById(R.id.no_movies_view));
         mMoviesGridView.setAdapter(mMovieAdapter);
         mMoviesGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -109,9 +110,12 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
 
     @Override
     public void onMoviesLoaded(List<Movie> movies) {
-        mMovieAdapter.clear();
-        mMovieAdapter.addAll(movies);
         mLoadingMoviesProgress.setVisibility(View.GONE);
+        mMovieAdapter.clear();
+
+        if(movies!= null) {
+            mMovieAdapter.addAll(movies);
+        }
     }
 
     public interface IMovieClickListener {

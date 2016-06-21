@@ -12,7 +12,7 @@
         android:stretchMode="columnWidth"
         android:gravity="center"
         android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp"/>
+        android:horizontalSpacing="0dp" />
 
     <ProgressBar
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -23,4 +23,18 @@
         android:indeterminate="true"
         android:visibility="gone"
         />
+
+    <RelativeLayout
+        android:id="@+id/no_movies_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/no_movies"/>
+
+    </RelativeLayout>
 </FrameLayout>

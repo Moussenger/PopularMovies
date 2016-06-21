@@ -28,14 +28,9 @@ public class MovieUtils {
         }
     }
 
-    public static Uri getMoviesUri (Context context) {
+    public static Uri getMoviesUri (Context context, String sortParam) {
         final String SORT_BY = "sort_by";
         final String API_KEY = "api_key";
-
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String sortParam = sharedPrefs.getString(
-                context.getString(R.string.pref_sort_key),
-                context.getString(R.string.most_popular_sort));
 
         return Uri.parse(context.getString(R.string.movies_base_url)).buildUpon()
                 .appendQueryParameter(SORT_BY, sortParam)
@@ -47,5 +42,12 @@ public class MovieUtils {
         return Uri.parse(context.getString(R.string.image_uri)).buildUpon()
                 .appendEncodedPath(posterCode)
                 .build();
+    }
+
+    public static String getSortParam (Context context) {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPrefs.getString(
+                context.getString(R.string.pref_sort_key),
+                context.getString(R.string.most_popular_sort));
     }
 }

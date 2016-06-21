@@ -18,6 +18,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.udacity.mou.project.popularmovies.R;
+import edu.udacity.mou.project.popularmovies.data.operations.MovieProviderOperations;
+import edu.udacity.mou.project.popularmovies.helpers.DataHelper;
 import edu.udacity.mou.project.popularmovies.model.Movie;
 import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 
@@ -30,6 +33,7 @@ public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
 
     private Context mContext;
     private IMoviesNetworkListener mListener;
+    private String mSortParam;
 
     public MoviesNetworkTask (Context context, IMoviesNetworkListener listener) {
         mContext  = context;
@@ -50,8 +54,15 @@ public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
 
         String moviesJsonString = null;
 
+        mSortParam = MovieUtils.getSortParam(mContext);
+
+        if(mSortParam.equals(mContext.getString(R.string.favorites_sort))) {
+            return DataHelper.getMovieProviderOperations(mContext).getFavorites();
+        }
+
         try {
-            Uri uri = MovieUtils.getMoviesUri(mContext);
+
+            Uri uri = MovieUtils.getMoviesUri(mContext, mSortParam);
             URL url = new URL(uri.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -130,7 +141,7 @@ public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
 
     @Override
     protected void onPostExecute(List<Movie> movies) {
-        if(movies != null && mListener != null) {
+        if(mListener != null) {
             mListener.onMoviesLoaded(movies);
         }
     }

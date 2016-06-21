@@ -2,32 +2,17 @@ package edu.udacity.mou.project.popularmovies;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
+import edu.udacity.mou.project.popularmovies.data.operations.MovieProviderOperations;
+import edu.udacity.mou.project.popularmovies.helpers.DataHelper;
 import edu.udacity.mou.project.popularmovies.model.Movie;
 import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 
@@ -38,8 +23,8 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
 
     public static final String MOVIE = "movie";
 
-    private static final int STAR_EMPTY    = R.drawable.star_empty_icon;
-    private static final int STAR_SELECTED = R.drawable.star_selected_icon;
+    private static final int STAR_EMPTY    = R.drawable.fav_empty_icon;
+    private static final int STAR_SELECTED = R.drawable.fav_selected_icon;
 
     private TextView  mTitleTextView;
     private ImageView mPosterImageView;
@@ -49,6 +34,8 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
     private ImageView mFavImageView;
 
     private Movie mMovie;
+
+    private MovieProviderOperations mMovieProviderOperations;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +48,7 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
         if(intent != null && intent.hasExtra(MOVIE)) {
             Movie movie = intent.getParcelableExtra(MOVIE);
             mMovie = movie;
+            mMovieProviderOperations = DataHelper.getMovieProviderOperations(getActivity().getApplicationContext());
             populateData(movie);
         }
 
@@ -81,8 +69,9 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
         mDateTextView.setText(MovieUtils.getYearOfDate(movie.getReleaseDate()));
         mRatingTextView.setText(getString(R.string.format_rating, movie.getUserRating()));
         mSynopsisTextView.setText(movie.getSynopsis());
-
         mFavImageView.setOnClickListener(this);
+
+        mMovie.setFavorite(mMovieProviderOperations.isFavorite(mMovie));
 
         updateFavoriteIcon();
 
@@ -97,8 +86,18 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        mMovie.setFavorite(!mMovie.isFavorite());
+        boolean newValue = !mMovie.isFavorite();
+        mMovie.setFavorite(newValue);
         updateFavoriteIcon();
+        updateStoreFavorite(newValue);
+    }
+
+    private void updateStoreFavorite (boolean favorite) {
+        if(favorite) {
+            mMovieProviderOperations.insertFavorite(mMovie);
+        } else {
+            mMovieProviderOperations.removeFavorite(mMovie);
+        }
     }
 
     private void updateFavoriteIcon () {
