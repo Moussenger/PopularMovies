@@ -27,127 +27,51 @@ import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 /**
  * Created by Mou on 27/9/15.
  */
-public class MoviesNetworkTask extends AsyncTask<String, Void, List<Movie>> {
+public class MoviesNetworkTask extends AbstractGeneralMoviesNetworkTask<Movie> {
+    private final String ID            = "id";
+    private final String ORIGINAL_TITLE = "original_title";
+    private final String MOVIE_POSTER   = "poster_path";
+    private final String SYNOPSIS       = "overview";
+    private final String USER_RATING    = "vote_average";
+    private final String RELEASE_DATE   = "release_date";
 
-    private final String LOG_TAG = MoviesNetworkTask.class.getSimpleName();
-
-    private Context mContext;
-    private IMoviesNetworkListener mListener;
+    private INetworkListener mListener;
     private String mSortParam;
 
-    public MoviesNetworkTask (Context context, IMoviesNetworkListener listener) {
-        mContext  = context;
-        mListener = listener;
+    public MoviesNetworkTask (Context context, INetworkListener listener) {
+        super(context, listener);
     }
 
     @Override
     protected void onPreExecute() {
-        if(mListener != null) {
-            mListener.onStartMoviesLoad();
-        }
+        super.onPreExecute();
+
+        mSortParam = MovieUtils.getSortParam(getContext());
     }
 
     @Override
-    protected List<Movie> doInBackground(String... params) {
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        String moviesJsonString = null;
-
-        mSortParam = MovieUtils.getSortParam(mContext);
-
-        if(mSortParam.equals(mContext.getString(R.string.favorites_sort))) {
-            return DataHelper.getMovieProviderOperations(mContext).getFavorites();
-        }
-
-        try {
-
-            Uri uri = MovieUtils.getMoviesUri(mContext, mSortParam);
-            URL url = new URL(uri.toString());
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
-
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-
-            if (inputStream == null) { return null; }
-
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) { buffer.append(line + "\n"); }
-
-            if (buffer.length() == 0) { return null; }
-
-            moviesJsonString = buffer.toString();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "Error ", e);
-            return null;
-        } finally {
-            if (urlConnection != null) { urlConnection.disconnect(); }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
-        }
-
-        try {
-            return parsingMoviesJson(moviesJsonString);
-        } catch (JSONException e) {
-            Log.e(LOG_TAG, e.getMessage(), e);
-            e.printStackTrace();
+    protected List<Movie> getDataFromCache() {
+        if(mSortParam.equals(getContext().getString(R.string.favorites_sort))) {
+            return DataHelper.getMovieProviderOperations(getContext()).getFavorites();
         }
 
         return null;
     }
 
-    private ArrayList<Movie> parsingMoviesJson (String moviesJsonString) throws JSONException {
-        final String RESULTS = "results";
-
-        final String ID             = "id";
-        final String ORIGINAL_TITLE = "original_title";
-        final String MOVIE_POSTER   = "poster_path";
-        final String SYNOPSIS       = "overview";
-        final String USER_RATING    = "vote_average";
-        final String RELEASE_DATE   = "release_date";
-
-        ArrayList<Movie> movies = new ArrayList<>();
-
-        JSONObject moviesJson = new JSONObject(moviesJsonString);
-        JSONArray moviesResult = moviesJson.getJSONArray(RESULTS);
-
-        for(int i=0, length = moviesResult.length(); i < length; ++i) {
-            JSONObject movieJson = moviesResult.getJSONObject(i);
-
-            Movie movie = new Movie.Builder()
-                    .setId(movieJson.getLong(ID))
-                    .setOriginalTitle(movieJson.optString(ORIGINAL_TITLE))
-                    .setMoviePoster(movieJson.optString(MOVIE_POSTER))
-                    .setSynopsis(movieJson.optString(SYNOPSIS))
-                    .setUserRating((float) movieJson.optDouble(USER_RATING))
-                    .setReleaseDate(movieJson.optString(RELEASE_DATE))
-                    .build();
-
-            movies.add(movie);
-        }
-
-        return movies;
+    @Override
+    protected Uri getUri() {
+        return MovieUtils.getMoviesUri(getContext(), mSortParam);
     }
 
     @Override
-    protected void onPostExecute(List<Movie> movies) {
-        if(mListener != null) {
-            mListener.onMoviesLoaded(movies);
-        }
-    }
-
-    public interface IMoviesNetworkListener {
-        void onStartMoviesLoad ();
-        void onMoviesLoaded (List<Movie> movies);
+    protected Movie parseObject(JSONObject object) throws JSONException {
+        return new Movie.Builder()
+                .setId(object.getLong(ID))
+                .setOriginalTitle(object.optString(ORIGINAL_TITLE))
+                .setMoviePoster(object.optString(MOVIE_POSTER))
+                .setSynopsis(object.optString(SYNOPSIS))
+                .setUserRating((float) object.optDouble(USER_RATING))
+                .setReleaseDate(object.optString(RELEASE_DATE))
+                .build();
     }
 }

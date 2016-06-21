@@ -16,6 +16,8 @@ import edu.udacity.mou.project.popularmovies.R;
  */
 public class MovieUtils {
     private static final String LOG_TAG = MovieUtils.class.getSimpleName();
+    private static final String SORT_BY = "sort_by";
+    private static final String API_KEY = "api_key";
 
     public static String getYearOfDate (String dateString) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
@@ -29,8 +31,6 @@ public class MovieUtils {
     }
 
     public static Uri getMoviesUri (Context context, String sortParam) {
-        final String SORT_BY = "sort_by";
-        final String API_KEY = "api_key";
 
         return Uri.parse(context.getString(R.string.movies_base_url)).buildUpon()
                 .appendQueryParameter(SORT_BY, sortParam)
@@ -41,6 +41,15 @@ public class MovieUtils {
     public static Uri getImageUri (Context context, String posterCode) {
         return Uri.parse(context.getString(R.string.image_uri)).buildUpon()
                 .appendEncodedPath(posterCode)
+                .build();
+    }
+
+    public static Uri getTrailersUri (Context context, long movieId) {
+        String baseUrl = context.getString(R.string.trailers_base_url);
+        String url = String.format(baseUrl, movieId);
+
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(API_KEY, context.getString(R.string.api_key))
                 .build();
     }
 

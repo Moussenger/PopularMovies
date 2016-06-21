@@ -39,7 +39,7 @@ import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 /**
  * Created by Mou on 26/9/15.
  */
-public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMoviesNetworkListener{
+public class MoviesFragment extends Fragment implements MoviesNetworkTask.INetworkListener<Movie> {
 
     private GridView mMoviesGridView;
     private MoviesAdapter mMovieAdapter;
@@ -104,12 +104,12 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.IMovie
     public void setListener(IMovieClickListener listener) { mListener = listener; }
 
     @Override
-    public void onStartMoviesLoad() {
+    public void onStartLoad() {
         mLoadingMoviesProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
-    public void onMoviesLoaded(List<Movie> movies) {
+    public void onDataLoaded(List<Movie> movies) {
         mLoadingMoviesProgress.setVisibility(View.GONE);
         mMovieAdapter.clear();
 

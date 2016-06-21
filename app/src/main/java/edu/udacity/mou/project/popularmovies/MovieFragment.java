@@ -3,6 +3,7 @@ package edu.udacity.mou.project.popularmovies;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,21 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 import edu.udacity.mou.project.popularmovies.data.operations.MovieProviderOperations;
 import edu.udacity.mou.project.popularmovies.helpers.DataHelper;
 import edu.udacity.mou.project.popularmovies.model.Movie;
+import edu.udacity.mou.project.popularmovies.network.AbstractGeneralMoviesNetworkTask;
+import edu.udacity.mou.project.popularmovies.network.MoviesNetworkTask;
+import edu.udacity.mou.project.popularmovies.network.TrailersNetworkTask;
 import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 
 /**
  * Created by Mou on 26/9/15.
  */
 public class MovieFragment extends Fragment implements View.OnClickListener{
-
+    public static final String LOG_TAG = MovieFragment.class.getSimpleName();
     public static final String MOVIE = "movie";
 
     private static final int STAR_EMPTY    = R.drawable.fav_empty_icon;
@@ -36,6 +42,20 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
     private Movie mMovie;
 
     private MovieProviderOperations mMovieProviderOperations;
+
+
+    private AbstractGeneralMoviesNetworkTask.INetworkListener mTrailersListener = new AbstractGeneralMoviesNetworkTask.INetworkListener() {
+        @Override
+        public void onStartLoad() {
+
+        }
+
+        @Override
+        public void onDataLoaded(List data) {
+            Log.d(LOG_TAG, data.toString());
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,6 +110,14 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
         mMovie.setFavorite(newValue);
         updateFavoriteIcon();
         updateStoreFavorite(newValue);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        TrailersNetworkTask networkTask = new TrailersNetworkTask(getActivity(), mMovie, mTrailersListener);
+        networkTask.execute();
     }
 
     private void updateStoreFavorite (boolean favorite) {
