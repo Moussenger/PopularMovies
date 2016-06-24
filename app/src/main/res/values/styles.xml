@@ -5,6 +5,17 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="SettingsTheme" parent="AppTheme"></style>
+    <style name="SettingsTheme" parent="AppTheme">
+
+    </style>
+
+    <style name="SelectableItemTheme">
+        <item name="colorControlHighlight">@color/main_color_50</item>
+    </style>
+
+    <style name="SelectableItemBackground">
+        <item name="android:theme">@style/SelectableItemTheme</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
 
 </resources>

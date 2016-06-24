@@ -1,4 +1,4 @@
-package edu.udacity.mou.project.popularmovies;
+package edu.udacity.mou.project.popularmovies.adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import edu.udacity.mou.project.popularmovies.R;
 import edu.udacity.mou.project.popularmovies.model.Movie;
 import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
 

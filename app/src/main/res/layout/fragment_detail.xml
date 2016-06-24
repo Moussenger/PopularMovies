@@ -10,11 +10,11 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="32dp"
-        android:paddingTop="32dp"
+        android:paddingBottom="@dimen/movie_title_vertical_padding"
+        android:paddingTop="@dimen/movie_title_vertical_padding"
         android:background="@color/main_color"
         android:textColor="@color/white"
-        android:textSize="36sp"/>
+        android:textSize="@dimen/movie_title_size"/>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
@@ -23,7 +23,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,19 +34,18 @@
 
                 <ImageView
                     android:id="@+id/movie_image"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:minHeight="200dp"
-                    android:layout_weight="1"
+                    android:minWidth="150dp"
                     android:paddingRight="16dp"
                     android:paddingLeft="16dp"
-                    android:layout_gravity="center"
+                    android:layout_gravity="right"
                     android:scaleType="centerInside"/>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -86,6 +86,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="16dp" />
+
+            <TextView
+                android:id="@+id/movie_trailers_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="@string/trailers_title"/>
+
+            <edu.udacity.mou.project.popularmovies.views.RecyclerViewWithEmptyView
+                android:id="@+id/trailers_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/empty_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="@string/empty_trailers_list" />
+
+            <TextView
+                android:id="@+id/movie_reviews_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:text="@string/reviews_title"/>
+
+            <edu.udacity.mou.project.popularmovies.views.RecyclerViewWithEmptyView
+                android:id="@+id/reviews_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/empty_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="@string/empty_reviews_list" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

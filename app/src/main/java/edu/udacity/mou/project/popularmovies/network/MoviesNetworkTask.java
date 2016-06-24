@@ -28,7 +28,7 @@ import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
  * Created by Mou on 27/9/15.
  */
 public class MoviesNetworkTask extends AbstractGeneralMoviesNetworkTask<Movie> {
-    private final String ID            = "id";
+    private final String ID             = "id";
     private final String ORIGINAL_TITLE = "original_title";
     private final String MOVIE_POSTER   = "poster_path";
     private final String SYNOPSIS       = "overview";

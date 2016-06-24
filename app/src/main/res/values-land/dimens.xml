@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="trailers_columns">2</integer>
+    <integer name="movies_columns">3</integer>
+    <dimen name="movie_title_size">18sp</dimen>
+    <dimen name="movie_title_vertical_padding">16dp</dimen>
+</resources>

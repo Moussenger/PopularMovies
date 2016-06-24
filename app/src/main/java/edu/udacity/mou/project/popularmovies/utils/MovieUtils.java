@@ -53,6 +53,30 @@ public class MovieUtils {
                 .build();
     }
 
+    public static Uri getYoutubeUri (Context context, String key) {
+        return getUriWithKey(context, R.string.youtube_video_uri, key);
+    }
+
+    public static Uri getTrailerThumbUri (Context context, String key) {
+        return getUriWithKey(context, R.string.youtube_thumb_uri, key);
+    }
+
+    private static Uri getUriWithKey(Context context, int urlResource, String key) {
+        String baseUrl = context.getString(urlResource);
+        String url = String.format(baseUrl, key);
+
+        return Uri.parse(url);
+    }
+
+    public static Uri getReviewsUri (Context context, long movieId) {
+        String baseUrl = context.getString(R.string.reviews_base_url);
+        String url = String.format(baseUrl, movieId);
+
+        return Uri.parse(url).buildUpon()
+                .appendQueryParameter(API_KEY, context.getString(R.string.api_key))
+                .build();
+    }
+
     public static String getSortParam (Context context) {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPrefs.getString(
