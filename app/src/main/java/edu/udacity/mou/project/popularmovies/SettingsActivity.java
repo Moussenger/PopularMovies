@@ -9,6 +9,8 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import edu.udacity.mou.project.popularmovies.utils.MovieUtils;
+
 /**
  * Created by Mou on 27/9/15.
  */
@@ -45,6 +47,9 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
         } else {
             preference.setSummary(stringValue);
         }
+
+        MovieUtils.setReload(true);
+
         return true;
     }
 

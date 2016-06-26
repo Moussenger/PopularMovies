@@ -3,16 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <GridView
+    <edu.udacity.mou.project.popularmovies.views.RecyclerViewWithEmptyView
         android:id="@+id/movies_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
-        android:numColumns="@integer/movies_columns"
-        android:stretchMode="columnWidth"
-        android:gravity="center"
-        android:verticalSpacing="0dp"
-        android:horizontalSpacing="0dp" />
+        android:background="#000000" />
 
     <ProgressBar
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -21,8 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="-7dp"
         android:indeterminate="true"
-        android:visibility="gone"
-        />
+        android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/no_movies_view"

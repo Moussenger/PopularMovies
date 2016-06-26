@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="movie_title_size">36sp</dimen>
+    <dimen name="movie_title_vertical_padding">32dp</dimen>
+    <integer name="right_pane_size">1</integer>
+    <integer name="left_pane_size">1</integer>
+</resources>

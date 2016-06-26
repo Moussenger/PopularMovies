@@ -107,14 +107,22 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detail, container, true);
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
         populateViews(view);
 
         Intent intent = getActivity().getIntent();
+        Bundle arguments = getArguments();
 
-        if(intent != null && intent.hasExtra(MOVIE)) {
-            Movie movie = intent.getParcelableExtra(MOVIE);
+        Movie movie = null;
+
+        if(arguments != null) {
+            movie = arguments.getParcelable(MOVIE);
+        } else if(intent != null && intent.hasExtra(MOVIE)){
+            movie = intent.getParcelableExtra(MOVIE);
+        }
+
+        if(movie != null) {
             mMovie = movie;
             mMovieProviderOperations = DataHelper.getMovieProviderOperations(getActivity().getApplicationContext());
             populateData(movie);
@@ -146,12 +154,14 @@ public class MovieFragment extends Fragment implements View.OnClickListener{
         final int trailerColumns = getResources().getInteger(R.integer.trailers_columns);
         mTrailersRecyclerView.setLayoutManager(new GridLayoutManager(mTrailersRecyclerView.getContext(), trailerColumns));
         mTrailersRecyclerView.setEmptyView(mEmptyTrailersView);
+        mTrailersRecyclerView.setNestedScrollingEnabled(false);
 
         mTrailersRecyclerViewAdapter = new TrailersRecyclerViewAdapter(getActivity().getApplicationContext());
         mTrailersRecyclerView.setAdapter(mTrailersRecyclerViewAdapter);
 
         mReviewsRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
         mReviewsRecyclerView.setEmptyView(mEmptyReviewsView);
+        mReviewsRecyclerView.setNestedScrollingEnabled(false);
 
         mReviewsRecyclerViewAdapter = new ReviewsRecyclerViewAdapter(getActivity().getApplicationContext());
         mReviewsRecyclerView.setAdapter(mReviewsRecyclerViewAdapter);

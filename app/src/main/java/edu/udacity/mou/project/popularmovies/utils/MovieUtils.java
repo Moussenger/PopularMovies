@@ -19,6 +19,8 @@ public class MovieUtils {
     private static final String SORT_BY = "sort_by";
     private static final String API_KEY = "api_key";
 
+    private static boolean sReload = true;
+
     public static String getYearOfDate (String dateString) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
 
@@ -82,5 +84,13 @@ public class MovieUtils {
         return sharedPrefs.getString(
                 context.getString(R.string.pref_sort_key),
                 context.getString(R.string.most_popular_sort));
+    }
+
+    public static boolean mustReload () {
+        return sReload;
+    }
+
+    public static void setReload (boolean reload) {
+        sReload = reload;
     }
 }
