@@ -170,7 +170,7 @@ public class MoviesFragment extends Fragment implements MoviesNetworkTask.INetwo
             }
         }
 
-        mMovies = new ArrayList<>(movies);
+        mMovies = movies != null ? new ArrayList<>(movies) : new ArrayList<Movie>();
     }
 
     public interface IMovieClickListener {

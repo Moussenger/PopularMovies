@@ -35,7 +35,7 @@ public class MovieUtils {
     public static Uri getMoviesUri (Context context, String sortParam) {
 
         return Uri.parse(context.getString(R.string.movies_base_url)).buildUpon()
-                .appendQueryParameter(SORT_BY, sortParam)
+                .appendPath(sortParam)
                 .appendQueryParameter(API_KEY, context.getString(R.string.api_key))
                 .build();
     }

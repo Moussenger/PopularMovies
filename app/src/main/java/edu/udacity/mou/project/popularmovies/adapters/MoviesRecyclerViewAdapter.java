@@ -93,7 +93,7 @@ public class MoviesRecyclerViewAdapter extends RecyclerView.Adapter<MoviesRecycl
     public void swap(List<Movie> newMovies){
         mMovies.clear();
 
-        if(mMovies != null) {
+        if(mMovies != null && newMovies != null) {
             mMovies.addAll(newMovies);
         }
 
